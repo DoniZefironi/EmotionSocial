@@ -13,7 +13,7 @@ import { toggleLike } from '../services/postService';
 import { useAuth } from '../contexts/AuthContext';
 import { formatRelativeTime } from '../utils/emotions';
 
-export default function PostCard({ post, onCommentsPress }) {
+export default function PostCard({ post, onCommentsPress, onProfilePress, onImagePress }) {
   const { user } = useAuth();
   const [liked, setLiked] = useState(post.likes?.includes(user?.uid));
   const [likesCount, setLikesCount] = useState(post.likes?.length || 0);
@@ -31,12 +31,32 @@ export default function PostCard({ post, onCommentsPress }) {
     }
   }
 
+  function handleProfilePress() {
+    if (post.userId !== user?.uid) {
+      onProfilePress?.(post.userId);
+    }
+  }
+
+  function handleImagePress() {
+    if (post.imageURL) {
+      onImagePress?.(post.imageURL);
+    }
+  }
+
+  const isOwnPost = post.userId === user?.uid;
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Avatar photoURL={post.photoURL} displayName={post.displayName} size={42} />
+        <TouchableOpacity onPress={handleProfilePress} disabled={isOwnPost}>
+          <Avatar photoURL={post.photoURL} displayName={post.displayName} size={42} />
+        </TouchableOpacity>
         <View style={styles.headerText}>
-          <Text style={styles.name}>{post.displayName || 'Пользователь'}</Text>
+          <TouchableOpacity onPress={handleProfilePress} disabled={isOwnPost}>
+            <Text style={[styles.name, !isOwnPost && styles.nameLink]}>
+              {post.displayName || 'Пользователь'}
+            </Text>
+          </TouchableOpacity>
           <Text style={styles.time}>{formatRelativeTime(post.createdAt)}</Text>
         </View>
         {post.emotion && <EmotionBadge emotion={post.emotion} size="sm" />}
@@ -45,7 +65,9 @@ export default function PostCard({ post, onCommentsPress }) {
       {post.content ? <Text style={styles.content}>{post.content}</Text> : null}
 
       {post.imageURL ? (
-        <Image source={{ uri: post.imageURL }} style={styles.image} resizeMode="cover" />
+        <TouchableOpacity onPress={handleImagePress} activeOpacity={0.9}>
+          <Image source={{ uri: post.imageURL }} style={styles.image} resizeMode="cover" />
+        </TouchableOpacity>
       ) : null}
 
       <View style={styles.actions}>
@@ -84,6 +106,7 @@ const styles = StyleSheet.create({
   },
   headerText: { flex: 1 },
   name: { fontSize: 15, fontWeight: '700', color: '#2D3436' },
+  nameLink: { color: '#6C5CE7' },
   time: { fontSize: 12, color: '#B2BEC3', marginTop: 1 },
   content: { fontSize: 15, color: '#2D3436', lineHeight: 22, marginBottom: 10 },
   image: {

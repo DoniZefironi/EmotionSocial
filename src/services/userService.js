@@ -18,6 +18,12 @@ export async function getUserProfile(uid) {
   return null;
 }
 
+export async function getUserProfileById(uid) {
+  const snap = await getDoc(doc(db, 'users', uid));
+  if (snap.exists()) return { id: snap.id, ...snap.data() };
+  return null;
+}
+
 export async function updateUserProfile(uid, updates) {
   await updateDoc(doc(db, 'users', uid), updates);
 }

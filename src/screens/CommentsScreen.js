@@ -15,7 +15,7 @@ import { addComment, subscribeToComments } from '../services/postService';
 import { useAuth } from '../contexts/AuthContext';
 import { formatRelativeTime } from '../utils/emotions';
 
-export default function CommentsScreen({ route }) {
+export default function CommentsScreen({ route, navigation }) {
   const { postId } = route.params;
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
@@ -23,6 +23,12 @@ export default function CommentsScreen({ route }) {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const inputRef = useRef(null);
+
+  function handleProfilePress(userId) {
+    if (userId !== user.uid) {
+      navigation.navigate('OtherProfile', { userId });
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = subscribeToComments(postId, (data) => {
@@ -70,10 +76,16 @@ export default function CommentsScreen({ route }) {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.comment}>
-            <Avatar photoURL={item.photoURL} displayName={item.displayName} size={36} />
+            <TouchableOpacity onPress={() => handleProfilePress(item.userId)} disabled={item.userId === user.uid}>
+              <Avatar photoURL={item.photoURL} displayName={item.displayName} size={36} />
+            </TouchableOpacity>
             <View style={styles.commentBody}>
               <View style={styles.commentBubble}>
-                <Text style={styles.commentName}>{item.displayName}</Text>
+                <TouchableOpacity onPress={() => handleProfilePress(item.userId)} disabled={item.userId === user.uid}>
+                  <Text style={[styles.commentName, item.userId !== user.uid && styles.commentNameLink]}>
+                    {item.displayName}
+                  </Text>
+                </TouchableOpacity>
                 <Text style={styles.commentText}>{item.content}</Text>
               </View>
               <Text style={styles.commentTime}>{formatRelativeTime(item.createdAt)}</Text>
@@ -131,6 +143,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   commentName: { fontSize: 13, fontWeight: '700', color: '#2D3436', marginBottom: 2 },
+  commentNameLink: { color: '#6C5CE7' },
   commentText: { fontSize: 14, color: '#2D3436', lineHeight: 20 },
   commentTime: { fontSize: 11, color: '#B2BEC3', marginTop: 4, marginLeft: 4 },
   inputRow: {

@@ -35,6 +35,14 @@ export default function FeedScreen({ navigation }) {
     navigation.navigate('Comments', { postId: post.id, postContent: post.content });
   }
 
+  function handleProfilePress(userId) {
+    navigation.navigate('OtherProfile', { userId });
+  }
+
+  function handleImagePress(imageUrl) {
+    navigation.navigate('ImageModal', { imageUrl });
+  }
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -49,7 +57,7 @@ export default function FeedScreen({ navigation }) {
         data={posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <PostCard post={item} onCommentsPress={handleCommentsPress} />
+          <PostCard post={item} onCommentsPress={handleCommentsPress} onProfilePress={handleProfilePress} onImagePress={handleImagePress} />
         )}
         refreshControl={
           <RefreshControl

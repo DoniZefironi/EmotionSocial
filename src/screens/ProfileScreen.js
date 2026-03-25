@@ -89,6 +89,16 @@ export default function ProfileScreen({ navigation }) {
     ]);
   }
 
+  function handleProfilePress(userId) {
+    if (userId !== user.uid) {
+      navigation.navigate('OtherProfile', { userId });
+    }
+  }
+
+  function handleImagePress(imageUrl) {
+    navigation.navigate('ImageModal', { imageUrl });
+  }
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.inner}>
       {/* Header */}
@@ -188,7 +198,7 @@ export default function ProfileScreen({ navigation }) {
         ) : posts.length === 0 ? (
           <Text style={styles.noPosts}>Вы ещё не публиковали посты</Text>
         ) : (
-          posts.map((post) => <PostCard key={post.id} post={post} />)
+          posts.map((post) => <PostCard key={post.id} post={post} onProfilePress={handleProfilePress} onImagePress={handleImagePress} />)
         )}
       </View>
 

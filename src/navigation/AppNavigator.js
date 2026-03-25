@@ -12,6 +12,8 @@ import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import CommentsScreen from '../screens/CommentsScreen';
+import OtherProfileScreen from '../screens/OtherProfileScreen';
+import ImageModalScreen from '../screens/ImageModalScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,6 +41,16 @@ function FeedStack() {
         name="CreatePost"
         component={CreatePostScreen}
         options={{ title: 'Новый пост', presentation: 'modal' }}
+      />
+      <Stack.Screen
+        name="OtherProfile"
+        component={OtherProfileScreen}
+        options={{ title: 'Профиль пользователя' }}
+      />
+      <Stack.Screen
+        name="ImageModal"
+        component={ImageModalScreen}
+        options={{ presentation: 'fullScreenModal', headerShown: false }}
       />
     </Stack.Navigator>
   );
