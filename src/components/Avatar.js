@@ -1,3 +1,4 @@
+// Аватарка: фото или цветной кружок с инициалами
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 

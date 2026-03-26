@@ -1,3 +1,4 @@
+// запрос к Face++ API
 import { FACE_API_KEY, FACE_API_SECRET, FACE_API_URL, IS_DEMO_MODE } from '../config/faceConfig';
 
 function generateDemoEmotions() {

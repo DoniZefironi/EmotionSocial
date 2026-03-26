@@ -1,3 +1,4 @@
+// Чужой профиль. Просмотр постов другого пользователя
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -43,7 +44,6 @@ export default function OtherProfileScreen({ route, navigation }) {
     return unsubscribe;
   }, [userId]);
 
-  // Подсчёт статистики эмоций
   const emotionStats = posts.reduce((acc, post) => {
     if (post.emotion) {
       acc[post.emotion] = (acc[post.emotion] || 0) + 1;

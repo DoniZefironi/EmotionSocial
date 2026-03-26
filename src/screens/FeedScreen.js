@@ -1,3 +1,4 @@
+// Лента постов. FlatList с PostCard, pull-to-refresh
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -18,6 +19,7 @@ export default function FeedScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Автоматическое получение обновлений ленты в realtime
   useEffect(() => {
     const unsubscribe = subscribeToPosts((data) => {
       setPosts(data);
@@ -27,18 +29,22 @@ export default function FeedScreen({ navigation }) {
     return unsubscribe;
   }, []);
 
+  // Обновление ленты при свайпе вниз
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
   }, []);
 
+  // Перейти на экран комментариев
   function handleCommentsPress(post) {
     navigation.navigate('Comments', { postId: post.id, postContent: post.content });
   }
 
+  // Перейти в профиль пользователя
   function handleProfilePress(userId) {
     navigation.navigate('OtherProfile', { userId });
   }
 
+  // Открыть изображение на весь экран
   function handleImagePress(imageUrl) {
     navigation.navigate('ImageModal', { imageUrl });
   }

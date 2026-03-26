@@ -1,3 +1,4 @@
+// Вход/регистрация. Email + пароль + имя
 import React, { useState } from 'react';
 import {
   View,

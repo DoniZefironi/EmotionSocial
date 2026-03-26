@@ -1,3 +1,4 @@
+// Бейдж эмоции (emoji + название)
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { getEmotionInfo } from '../utils/emotions';

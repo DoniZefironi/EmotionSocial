@@ -1,3 +1,4 @@
+// Профиль пользователя. Статистика, посты, био
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -83,10 +84,26 @@ export default function ProfileScreen({ navigation }) {
   }
 
   async function handleSignOut() {
-    Alert.alert('Выход', 'Вы уверены?', [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Выйти', style: 'destructive', onPress: signOut },
-    ]);
+    // Для веба используем confirm, для мобильного — Alert
+    if (window.confirm) {
+      // Веб-версия
+      const confirmed = window.confirm('Вы уверены, что хотите выйти из аккаунта?');
+      if (confirmed) {
+        try {
+          await signOut();
+          console.log('✅ Успешный выход из аккаунта');
+        } catch (err) {
+          console.error('❌ Ошибка выхода:', err);
+          alert('Ошибка при выходе: ' + err.message);
+        }
+      }
+    } else {
+      // Мобильное приложение
+      Alert.alert('Выход', 'Вы уверены?', [
+        { text: 'Отмена', style: 'cancel' },
+        { text: 'Выйти', style: 'destructive', onPress: signOut },
+      ]);
+    }
   }
 
   function handleProfilePress(userId) {

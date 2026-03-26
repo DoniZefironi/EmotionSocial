@@ -48,7 +48,18 @@ export function AuthProvider({ children }) {
   }
 
   async function signOut() {
-    await firebaseSignOut(auth);
+    console.log('🚪 Выход из аккаунта...', user?.email);
+    try {
+      await firebaseSignOut(auth);
+      console.log('✅ Успешный выход');
+      // Принудительно очищаем localStorage для веба
+      if (typeof window !== 'undefined' && window.localStorage) {
+        console.log('🧹 Очистка localStorage');
+      }
+    } catch (err) {
+      console.error('❌ Ошибка выхода:', err);
+      throw err;
+    }
   }
 
   async function refreshProfile() {

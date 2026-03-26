@@ -1,3 +1,4 @@
+// Карточка поста: аватар, имя, эмоция, текст, фото, лайки, комментарии
 import React, { useState } from 'react';
 import {
   View,
@@ -18,6 +19,7 @@ export default function PostCard({ post, onCommentsPress, onProfilePress, onImag
   const [liked, setLiked] = useState(post.likes?.includes(user?.uid));
   const [likesCount, setLikesCount] = useState(post.likes?.length || 0);
 
+  // Поставить/снять лайк
   async function handleLike() {
     if (!user) return;
     const wasLiked = liked;
@@ -31,12 +33,14 @@ export default function PostCard({ post, onCommentsPress, onProfilePress, onImag
     }
   }
 
+  // Перейти в профиль автора
   function handleProfilePress() {
     if (post.userId !== user?.uid) {
       onProfilePress?.(post.userId);
     }
   }
 
+  // Открыть изображение на весь экран
   function handleImagePress() {
     if (post.imageURL) {
       onImagePress?.(post.imageURL);

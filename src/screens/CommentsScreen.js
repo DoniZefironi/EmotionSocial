@@ -1,3 +1,4 @@
+// Комментарии к посту. Список + форма отправки
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,

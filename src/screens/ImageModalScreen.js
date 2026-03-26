@@ -1,3 +1,4 @@
+// Полноэкранный просмотр изображений
 import React from 'react';
 import {
   View,

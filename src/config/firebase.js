@@ -1,10 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Вставьте свои настройки Firebase сюда
-// Firebase Console → Project Settings → Your apps → SDK setup
 const firebaseConfig = {
   apiKey: "AIzaSyAUFgP8wKNwBy2cr1AECcKzESdCpQ3_-fQ",
   authDomain: "emotionsocial-a649c.firebaseapp.com",
@@ -17,13 +14,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 let auth;
-try {
+
+// Определяем платформу
+const isWeb = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+if (isWeb) {
+  // Для веба используем browserLocalPersistence
+  const { getAuth } = require('firebase/auth');
+  auth = getAuth(app, {
+    persistence: browserLocalPersistence,
+  });
+  console.log('🌐 Firebase Auth: веб-версия (browserLocalPersistence)');
+} else {
+  // Для React Native используем AsyncStorage
+  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
   auth = initializeAuth(app, {
     persistence: getReactNativePersistence(AsyncStorage),
   });
-} catch (e) {
-  const { getAuth } = require('firebase/auth');
-  auth = getAuth(app);
+  console.log('📱 Firebase Auth: мобильная версия (AsyncStorage)');
 }
 
 const db = getFirestore(app);

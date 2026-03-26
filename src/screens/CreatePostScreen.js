@@ -1,3 +1,4 @@
+// Создание поста. Текст + фото + выбор эмоции
 import React, { useState } from 'react';
 import {
   View,

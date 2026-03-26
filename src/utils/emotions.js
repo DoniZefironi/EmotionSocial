@@ -8,6 +8,7 @@ export const EMOTIONS = {
   disgust: { label: 'Отвращение', emoji: '🤢', color: '#00B894', bgColor: '#E0F5F0' },
 };
 
+// определяет преобладающую эмоцию
 export function getDominantEmotion(emotionData) {
   if (!emotionData) return 'neutral';
   let maxVal = -1;
@@ -21,10 +22,12 @@ export function getDominantEmotion(emotionData) {
   return dominant;
 }
 
+// возвращает emoji, label, color для эмоции
 export function getEmotionInfo(key) {
   return EMOTIONS[key] || EMOTIONS.neutral;
 }
 
+// форматирует время 
 export function formatRelativeTime(date) {
   if (!date) return '';
   const now = new Date();

@@ -1,3 +1,4 @@
+// Камера для распознавания эмоций. expo-camera
 import React, { useRef, useState } from 'react';
 import {
   View,
@@ -11,7 +12,6 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { detectEmotion } from '../services/emotionService';
 import { getDominantEmotion, getEmotionInfo } from '../utils/emotions';
-import EmotionBadge from '../components/EmotionBadge';
 import { IS_DEMO_MODE } from '../config/faceConfig';
 
 export default function CameraScreen({ navigation }) {
@@ -22,6 +22,7 @@ export default function CameraScreen({ navigation }) {
   const [facing, setFacing] = useState('front');
   const cameraRef = useRef(null);
 
+  // Нет доступа к камере
   if (!permission) {
     return <View style={styles.container} />;
   }
@@ -41,6 +42,7 @@ export default function CameraScreen({ navigation }) {
     );
   }
 
+  // Сделать снимок и распознать эмоцию
   async function takePicture() {
     if (!cameraRef.current || detecting) return;
     try {
@@ -65,15 +67,18 @@ export default function CameraScreen({ navigation }) {
     }
   }
 
+  // Сбросить фото и эмоцию для нового снимка
   function retake() {
     setPhoto(null);
     setEmotion(null);
   }
 
+  // Перейти на экран создания поста с фото и эмоцией
   function createPost() {
     navigation.navigate('CreatePost', { emotion, photoUri: photo });
   }
 
+  // Просмотр результата (фото + эмоция)
   if (photo) {
     return (
       <View style={styles.container}>
@@ -107,6 +112,7 @@ export default function CameraScreen({ navigation }) {
     );
   }
 
+  // Камера активна (основной режим)
   return (
     <View style={styles.container}>
       <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
